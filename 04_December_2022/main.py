@@ -1,4 +1,3 @@
-
 import os
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -9,11 +8,17 @@ def load_file():
         for line in file.readlines():
             yield line.strip()
 
+
+def get_sets(line: str):
+    first = line.split(",")[0].split("-")
+    first_list = list(range(int(first[0]), int(first[1]) + 1))
+    second = line.split(",")[1].split("-")
+    second_list = list(range(int(second[0]), int(second[1]) + 1))
+    return first_list, second_list
+
+
 def compare_sections(line: str) -> int:
-    first = line.split(',')[0].split('-')
-    first_list = list(range(int(first[0]), int(first[1])+1))
-    second = line.split(',')[1].split('-')
-    second_list = list(range(int(second[0]), int(second[1])+1))
+    first_list, second_list = get_sets(line)
     if set(first_list).issubset(set(second_list)):
         return 1
     if set(second_list).issubset(set(first_list)):
@@ -22,10 +27,10 @@ def compare_sections(line: str) -> int:
 
 
 def compare_section_two(line: str) -> int:
-    first = line.split(',')[0].split('-')
-    first_list = list(range(int(first[0]), int(first[1])+1))
-    second = line.split(',')[1].split('-')
-    second_list = list(range(int(second[0]), int(second[1])+1))
+    first = line.split(",")[0].split("-")
+    first_list = list(range(int(first[0]), int(first[1]) + 1))
+    second = line.split(",")[1].split("-")
+    second_list = list(range(int(second[0]), int(second[1]) + 1))
     intersection = set(first_list) & set(second_list)
     if len(intersection) > 0:
         return 1
@@ -41,6 +46,7 @@ def main():
         sum_two += compare_section_two(line)
     print(f"Total overlapping sections: {sum}")
     print(f"Total overlapping sections two: {sum_two}")
+
 
 if __name__ == "__main__":
     main()
