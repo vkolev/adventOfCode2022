@@ -1,4 +1,3 @@
-
 from collections import defaultdict
 import os
 import re
@@ -6,30 +5,33 @@ from typing import List, Dict, Tuple
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
+
 class Stack:
     def __init__(self, input_matrix: List[str]):
-        self.columns = self.create_columns(input_matrix)
+        self.columns = self.__create_columns(input_matrix)
 
-    def create_columns(self, input_matrix: List[str]) -> Dict[str, List[str]]:
+    def __create_columns(self, input_matrix: List[str]) -> Dict[str, List[str]]:
         result = defaultdict()
-        for key in input_matrix[len(input_matrix) - 1:][0].split('   '):
+        for key in input_matrix[len(input_matrix) - 1 :][0].split("   "):
             result[key.strip()] = []
-        for line in input_matrix[:len(input_matrix) - 1]:
+        for line in input_matrix[: len(input_matrix) - 1]:
             list_values = list(self.__create_chunks(line + " "))
             for index, item in enumerate(list_values):
                 new_item = item.strip()
                 if new_item != "":
-                    result[str(index + 1)].insert(0, new_item.replace("[", "").replace("]", ""))
+                    result[str(index + 1)].insert(
+                        0, new_item.replace("[", "").replace("]", "")
+                    )
         return result
 
     def __create_chunks(self, line):
         for chunk in range(0, len(line), 4):
-            yield line[chunk:chunk+4]
+            yield line[chunk : chunk + 4]
 
     def perform_moves(self, repeats: int, start: str, stop: str):
         for r in range(repeats):
             self.columns[stop].append(self.columns[start].pop())
-    
+
     def perform_moves_preserve(self, repeats: int, start: str, stop: str):
         temp = []
         for r in range(repeats):
@@ -59,6 +61,7 @@ def main():
     for move in get_moves(lines[10:]):
         stack.perform_moves(move[0], str(move[1]), str(move[2]))
     print(stack.print_result())
+
 
 def main_two():
     lines = list(load_file())
